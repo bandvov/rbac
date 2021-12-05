@@ -1,0 +1,20 @@
+[1mdiff --git a/index.js b/index.js[m
+[1mindex 124220f..a4f70c2 100644[m
+[1m--- a/index.js[m
+[1m+++ b/index.js[m
+[36m@@ -15,12 +15,13 @@[m [mapp.get("/", (req, res) => {[m
+ });[m
+ [m
+ app.use((req, res, next) => {[m
+[31m-  next(createHttpErrors.NotFound());[m
+[32m+[m[32m  next(createHttpError.NotFound());[m
+ });[m
+ [m
+ app.use((err, req, res) => {[m
+   err.status = err.status || 500;[m
+[31m-  res.status(err.status).send(err);[m
+[32m+[m[32m  res.status(err.status);[m
+[32m+[m[32m  res.send(err);[m
+ });[m
+ [m
+ app.listen(PORT, () => {[m
