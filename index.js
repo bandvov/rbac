@@ -17,7 +17,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname + "pablic")));
+app.use(express.static(path.join(__dirname + "/public")));
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,

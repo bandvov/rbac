@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "prod": "node index.js"
+    "prod": "node index.js",
+    "generate:cert": "openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365"
   },
   "keywords": [],
   "author": "",
