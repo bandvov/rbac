@@ -46,5 +46,5 @@ app.use((error, req, res, next) => {
   console.log(error);
   error.status = error.status || 500;
   res.status(error.status);
-  res.send(error);
+  res.render("error_40x", { error });
 });
