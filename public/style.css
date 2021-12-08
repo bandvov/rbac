@@ -1,25 +1,35 @@
+body {
+   display: flex;
+   align-items: center;
+   flex-direction: column;
+}
 nav {
+    width: 70vw;
     display: flex;
     border: 1px solid;
     justify-content: space-between;
+    padding:  0 1rem;
+}
+main {
+    min-height: 80vh;
 }
 h2 {
     width: auto;
     margin-right: auto;
 }
 ul {  
-    width: 50vw;
+    width: auto;
     padding: 0;
     display: flex;
 }
 li {
     display: flex;
     list-style: none;
-    flex: 1;
+
 }
 li a {
     width: 100%;
-    padding: .5rem 0;
+    padding: .5rem;
 
     text-decoration: none;
     text-align: center;
@@ -29,6 +39,7 @@ li a:hover {
     color: white;
 } 
 footer {
+    width: 70vw;
     border: 1px solid;
     padding: 1rem;
     display: flex;
