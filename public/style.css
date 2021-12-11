@@ -65,3 +65,49 @@ footer {
     display: flex;
     justify-content: center;
 }
+.form-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+    margin-block: 50%;
+    padding-block-end: 1rem;
+    padding-inline: 1rem;
+    border-radius: .5rem;
+    align-items: center;
+}
+
+.form-container h2 {
+    align-self: center;
+    margin-inline: auto;
+    
+}
+input[type=text],input[type=password] {
+    padding-block: .5rem;
+    padding-inline: .5rem;
+    border: 1px solid;
+}
+.form-input {
+    display: flex;
+    flex-direction: column;
+   block-size: 5rem;
+}
+button {
+   inline-size: 100%;
+    padding-block: .5rem;
+    padding-inline: 1rem;
+    background-color: transparent;
+    border: 1px solid;
+    border-radius: 5px;
+  
+}
+button:hover {
+    cursor: pointer;
+    background-color: rgb(221, 221, 221);
+  
+}
+.error {
+    color: red;
+}
+.sign-in {
+padding-block-start: 1rem;
+}
