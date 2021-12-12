@@ -111,3 +111,20 @@ button:hover {
 .sign-in {
 padding-block-start: 1rem;
 }
+.messages ul{
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+}
+.messages .error {
+    background-color: rgb(255, 226, 226);
+    padding: .5rem;
+}
+.messages .success {
+    background-color: rgb(226, 255, 227);
+    padding: .5rem;
+}
+.messages .info {
+    background-color: rgb(226, 237, 255);
+    padding: .5rem;
+}
