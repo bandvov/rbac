@@ -32,7 +32,11 @@ router
       errors.array().forEach((error) => {
         req.flash("error", error.msg);
       });
-      res.render("register", { messages: req.flash() });
+      res.render("register", {
+        messages: req.flash(),
+        email: req.body.email,
+        password: req.body.password,
+      });
     }
     try {
       const userExists = await UserModel.findOne({ email });

@@ -4,7 +4,13 @@
   <form method="POST" action="/auth/register">
     <div class="form-input">
       <label for="email">Enter email</label>
-      <input id="email" name="email" type="text" placeholder="email..." />
+      <input
+        id="email"
+        name="email"
+        type="text"
+        placeholder="email..."
+        value="<%= locals.email ? email : '' %>"
+      />
       <!-- <span class="error">error</span> -->
     </div>
     <div class="form-input">
@@ -14,6 +20,7 @@
         name="password"
         type="password"
         placeholder="password..."
+        value="<%= locals.password ? password : '' %>"
       />
       <!-- <span class="error">error</span> -->
     </div>
