@@ -1,8 +1,19 @@
 const express = require("express");
 const UserModel = require("../models/user");
 const { body, validationResult } = require("express-validator");
+const passport = require("../utils/passport.auth");
 
 const router = express.Router();
+router.use("/login", [
+  body("email")
+    .trim()
+    .isEmail()
+    .withMessage("Email format is not correct")
+    .normalizeEmail()
+    .toLowerCase(),
+  body("password").trim().isLength(2).withMessage("Password is too short"),
+  ensureNotAuthentificated,
+]);
 router.use("/register", [
   body("email")
     .trim()
@@ -11,15 +22,21 @@ router.use("/register", [
     .normalizeEmail()
     .toLowerCase(),
   body("password").trim().isLength(2).withMessage("Password is too short"),
+  ensureNotAuthentificated,
 ]);
+router.use("/logout", [ensureAuthentificated]);
 router
   .route("/login")
   .get(async (req, res) => {
     res.render("login");
   })
-  .post(async (req, res) => {
-    res.send("login");
-  });
+  .post(
+    passport.authenticate("local", {
+      failureFlash: true,
+      successRedirect: "/user/profile",
+      failureRedirect: "/auth/login",
+    })
+  );
 router
   .route("/register")
   .get(async (req, res) => {
@@ -52,7 +69,14 @@ router
     }
   });
 router.get("/logout", async (req, res) => {
-  res.send("logout");
+  req.logOut();
+  res.redirect("/");
 });
+function ensureAuthentificated(req, res, next) {
+  req.isAuthenticated() ? next() : res.redirect("/auth/login");
+}
+function ensureNotAuthentificated(req, res, next) {
+  req.isAuthenticated() ? res.redirect("back") : next();
+}
 
 module.exports = router;

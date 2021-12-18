@@ -9,6 +9,8 @@ const userRouter = require("./routes/user");
 const path = require("path");
 const connectFlash = require("connect-flash");
 const session = require("express-session");
+const passport = require("./utils/passport.auth");
+const MongoStore = require("connect-mongo");
 
 dotenv.config();
 
@@ -18,6 +20,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -27,8 +30,19 @@ app.use(
       domain: "localhost",
       httpOnly: true,
     },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URL,
+    }),
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+require("./utils/passport.auth");
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 app.use(connectFlash());
 app.use((req, res, next) => {
   res.locals.messages = req.flash();
@@ -54,16 +68,18 @@ mongoose
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
-app.use("/user", userRouter);
+app.use("/user", ensureAuthentificated, userRouter);
 
 app.use((req, res, next) => {
   next(createHttpErrors.NotFound());
 });
 
 // Error Handler
-app.use((error, req, res, next) => {
-  console.log(error);
+app.use((error, req, res) => {
   error.status = error.status || 500;
   res.status(error.status);
   res.render("error_40x", { error });
 });
+function ensureAuthentificated(req, res, next) {
+  req.isAuthenticated() ? next() : res.redirect("/auth/login");
+}

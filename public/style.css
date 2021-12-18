@@ -128,3 +128,12 @@ padding-block-start: 1rem;
     background-color: rgb(226, 237, 255);
     padding: .5rem;
 }
+#profile-page {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+    border-radius: 5px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+}
