@@ -2,6 +2,7 @@ const express = require("express");
 const UserModel = require("../models/user");
 const { body, validationResult } = require("express-validator");
 const passport = require("../utils/passport.auth");
+const connectEnsureLogin = require("connect-ensure-login");
 
 const router = express.Router();
 router.use("/login", [
@@ -12,7 +13,7 @@ router.use("/login", [
     .normalizeEmail()
     .toLowerCase(),
   body("password").trim().isLength(2).withMessage("Password is too short"),
-  ensureNotAuthentificated,
+  connectEnsureLogin.ensureLoggedOut({ redirectTo: "/" }),
 ]);
 router.use("/register", [
   body("email")
@@ -22,9 +23,9 @@ router.use("/register", [
     .normalizeEmail()
     .toLowerCase(),
   body("password").trim().isLength(2).withMessage("Password is too short"),
-  ensureNotAuthentificated,
+  connectEnsureLogin.ensureLoggedOut({ redirectTo: "/" }),
 ]);
-router.use("/logout", [ensureAuthentificated]);
+router.use("/logout", [connectEnsureLogin.ensureLoggedIn({ redirectTo: "/" })]);
 router
   .route("/login")
   .get(async (req, res) => {
@@ -33,7 +34,7 @@ router
   .post(
     passport.authenticate("local", {
       failureFlash: true,
-      successRedirect: "/user/profile",
+      successReturnToOrRedirect: "/",
       failureRedirect: "/auth/login",
     })
   );
@@ -62,6 +63,7 @@ router
       }
       const user = await UserModel.create(req.body);
       if (user) {
+        req.flash("success", { messages: "User successfully created" });
         res.redirect("/auth/login");
       }
     } catch (err) {
@@ -72,11 +74,11 @@ router.get("/logout", async (req, res) => {
   req.logOut();
   res.redirect("/");
 });
-function ensureAuthentificated(req, res, next) {
-  req.isAuthenticated() ? next() : res.redirect("/auth/login");
-}
-function ensureNotAuthentificated(req, res, next) {
-  req.isAuthenticated() ? res.redirect("back") : next();
-}
+// function ensureAuthentificated(req, res, next) {
+//   req.isAuthenticated() ? next() : res.redirect("/auth/login");
+// }
+// function ensureNotAuthentificated(req, res, next) {
+//   req.isAuthenticated() ? res.redirect("back") : next();
+// }
 
 module.exports = router;

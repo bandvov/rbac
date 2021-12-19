@@ -11,6 +11,9 @@ const connectFlash = require("connect-flash");
 const session = require("express-session");
 const passport = require("./utils/passport.auth");
 const MongoStore = require("connect-mongo");
+const connectEnsureLogin = require("connect-ensure-login");
+const adminRouter = require("./routes/admin");
+const roles = require("./utils/constants");
 
 dotenv.config();
 
@@ -68,7 +71,17 @@ mongoose
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
-app.use("/user", ensureAuthentificated, userRouter);
+app.use(
+  "/user",
+  connectEnsureLogin.ensureLoggedIn({ redirectTo: "/auth/login" }),
+  userRouter
+);
+app.use(
+  "/admin",
+  connectEnsureLogin.ensureLoggedIn({ redirectTo: "/auth/login" }),
+  ensureIsAdmin,
+  adminRouter
+);
 
 app.use((req, res, next) => {
   next(createHttpErrors.NotFound());
@@ -80,6 +93,22 @@ app.use((error, req, res) => {
   res.status(error.status);
   res.render("error_40x", { error });
 });
-function ensureAuthentificated(req, res, next) {
-  req.isAuthenticated() ? next() : res.redirect("/auth/login");
+// function ensureAuthentificated(req, res, next) {
+//   req.isAuthenticated() ? next() : res.redirect("/auth/login");
+// }
+function ensureIsAdmin(req, res, next) {
+  if (req.user.role === roles.admin) {
+    next();
+  } else {
+    req.flash("warning", "You are not authorized to see this route");
+    res.redirect("/");
+  }
+}
+function ensureIsModerator(req, res, next) {
+  if (req.user.role === roles.moderator) {
+    next();
+  } else {
+    req.flash("warning", "You are not authorized to see this route");
+    res.redirect("/");
+  }
 }
