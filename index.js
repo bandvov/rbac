@@ -89,6 +89,7 @@ app.use((req, res, next) => {
 
 // Error Handler
 app.use((error, req, res) => {
+  console.log(error);
   error.status = error.status || 500;
   res.status(error.status);
   res.render("error_40x", { error });

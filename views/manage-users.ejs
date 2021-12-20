@@ -1,0 +1,45 @@
+<%- include("./layouts/header.ejs") %>
+
+<% if (locals.users) { %>
+    <div>
+        <table border="1px">
+            <thead id="users">
+                <tr>
+                    <th>Id</th>
+                    <th>Email</th>
+                    <th>Role</th>             
+                    <th>Action</th>             
+                </tr>
+            </thead>
+            <tbody>
+            <% users.forEach(user => { %>
+
+                <tr>
+                    <td>
+                        <%= user.id %> 
+                        </td>
+                    <td>
+                        <a href="/admin/user/<%= user.id %>">
+                            <%= user.email %> 
+                        </a>
+                    </td>
+                    <form method="post" action="/admin/update-role">
+                    <td>
+                            <input type="hidden" name="id" value="<%= user.id %>" />
+                            <select name="role">
+                                <option <%= user.role === "ADMIN" ? "selected": "" %> value="ADMIN">ADMIN</option>
+                                <option <%= user.role === "CLIENT" ? "selected": "" %> value="CLIENT">CLIENT</option>
+                                <option <%= user.role === "MODERATOR" ? "selected": "" %> value="MODERATOR">MODERATOR</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit">Update</button>
+                        </td>
+                    </form>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+<% } %>
+<%- include("./layouts/footer.ejs") %>

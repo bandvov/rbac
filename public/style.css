@@ -141,3 +141,15 @@ padding-block-start: 1rem;
     padding-right: 1rem;
     padding-bottom: 1rem;
 }
+th {
+    background-color: blueviolet;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+td,select {
+    padding: 0.5rem 1rem;
+}
+.table-actions form {
+ display: flex;
+    flex-direction: row;
+}

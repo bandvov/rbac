@@ -63,7 +63,7 @@ router
       }
       const user = await UserModel.create(req.body);
       if (user) {
-        req.flash("success", { messages: "User successfully created" });
+        req.flash("success", "User successfully created");
         res.redirect("/auth/login");
       }
     } catch (err) {
