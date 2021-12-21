@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 });
 
 // Error Handler
-app.use((error, req, res) => {
+app.use((error, req, res, next) => {
   console.log(error);
   error.status = error.status || 500;
   res.status(error.status);
